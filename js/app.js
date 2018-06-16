@@ -11,9 +11,18 @@ class Enemy {
   // Update the enemy's position, required method for game
   // Parameter: dt, a time delta between ticks
   update(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    this.render();
+    this.x = this.x + this.speed*dt;
+    if (this.x > 500) {
+      this.x = -100;
+      this.speed = this.speed + Math.floor(Math.random()*10);
+    }
+    //collision check
+    if ((player.x < this.x + 60 && player.x + 60 > this.x) && (player.y < this.y + 50 && player.y + 50 > this.y)) {
+      alert("Oops! You got caught! Try again.");
+      player.x = 200;
+      player.y = 400;
+    }
   }
   render() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -37,8 +46,22 @@ class Player {
   }
 
   handleInput(keyPress) {
-    if (keyPress == 'up') {
-      this.y -= 80;
+    if (keyPress == 'up' && this.y > 0) {
+      this.y -= 85;
+    }
+    if (keyPress == 'down' && this.y < 400) {
+      this.y += 85;
+    }
+    if (keyPress == 'left' && this.x > 0) {
+      this.x -= 100;
+    }
+    if (keyPress == 'right' && this.x < 400) {
+      this.x += 100;
+    }
+    if (this.y == -25) {
+      alert("You won the game!");
+      this.x = 200;
+      this.y = 400;
     }
 }
 }
@@ -46,8 +69,12 @@ class Player {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 var allEnemies = [];
-var enemy = new Enemy(0, 50, 10);
-allEnemies.push(enemy);
+var enemy1 = new Enemy(0, 50, 230);
+var enemy2 = new Enemy(230, 50, 200);
+var enemy3 = new Enemy(0, 135, 150);
+allEnemies.push(enemy1);
+allEnemies.push(enemy2);
+allEnemies.push(enemy3);
 // Place the player object in a variable called player
 var player = new Player(200, 400);
 
